@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento de Wason: Secuencia 2-4-6</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .sequence-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #3498db;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="number"] {
+            width: 70px;
+            margin-right: 10px;
+            text-align: center;
+        }
+        textarea {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .history {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .valid {
+            color: #27ae60;
+        }
+        .invalid {
+            color: #e74c3c;
+        }
+        .guess-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #edf7ff;
+            border-radius: 5px;
+            display: none;
+        }
+        .hypothesis-container {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .instructions {
+            background-color: #fffbeb;
+            padding: 15px;
+            border-left: 4px solid #f1c40f;
+            margin-bottom: 20px;
+        }
+        .congratulations {
+            background-color: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        .wrong-guess {
+            background-color: #fdedec;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .flex-item {
+            flex: 1;
+            min-width: 300px;
+        }
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .brackets {
+            font-size: 20px;
+            margin: 0 5px;
+        }
+        @media (max-width: 600px) {
+            input[type="number"] {
+                width: 60px;
+                margin-right: 5px;
+            }
+            .flex-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Experimento de Wason: El Reto de la Secuencia 2-4-6</h1>
+    
+    <div class="instructions">
+        <h3>Instrucciones:</h3>
+        <p>La secuencia [2, 4, 6] cumple con una regla secreta. Tu objetivo es descubrir esa regla.</p>
+        <p>Puedes probar otras secuencias de tres números, y el sistema te dirá si cumplen o no con la regla.</p>
+        <p>Utiliza el cuadro de hipótesis para registrar tus ideas mientras avanzas.</p>
+        <p><strong>IMPORTANTE:</strong> Solo tendrás UN intento para adivinar la regla final.</p>
+        <p><em>Intenta deducir la regla utilizando la menor cantidad de pruebas posible, pero tu prioridad principal es descubrir la regla correcta.</em></p>
+    </div>
+
+    <div class="container">
+        <div class="sequence-display">[2, 4, 6] - <span class="valid">Válida</span></div>
+        
+        <div>
+            <h3>Prueba una nueva secuencia:</h3>
+            <div class="input-group">
+                <span class="brackets">[</span>
+                <input type="number" id="num1" placeholder="?" step="any">
+                <span class="brackets">,</span>
+                <input type="number" id="num2" placeholder="?" step="any">
+                <span class="brackets">,</span>
+                <input type="number" id="num3" placeholder="?" step="any">
+                <span class="brackets">]</span>
+                <button id="test-button">Probar</button>
+            </div>
+        </div>
+        
+        <div class="flex-container">
+            <div class="flex-item">
+                <div class="history">
+                    <h3>Historial de pruebas:</h3>
+                    <div id="history-list">
+                        <div class="history-item">[2, 4, 6] - <span class="valid">Válida</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-item">
+                <div class="hypothesis-container">
+                    <h3>Registro de hipótesis:</h3>
+                    <textarea id="hypothesis-notes" placeholder="Escribe aquí tus ideas e hipótesis mientras pruebas diferentes secuencias..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>¿Crees que ya sabes la regla?</h3>
+        <p id="guess-warning" class="warning">Recuerda: solo tienes UN intento para adivinar la regla.</p>
+        <button id="guess-button">¡Quiero hacer mi suposición!</button>
+        
+        <div id="guess-container" class="guess-container">
+            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 70%;" />
+            <button id="submit-guess">Verificar mi respuesta</button>
+            <p>⚠️ Este es tu único intento para adivinar la regla</p>
+        </div>
+        
+        <div id="congratulations" class="congratulations">
+            <h3>¡Felicidades! 🎉</h3>
+            <p>Has descubierto la regla correctamente.</p>
+            <p>La regla era: <strong>Números en orden creciente</strong> (cada número es mayor que el anterior).</p>
+            <p>Este experimento, diseñado por Peter Wason en 1960, demuestra cómo tendemos a buscar confirmación de nuestras hipótesis en lugar de intentar refutarlas.</p>
+            <p>La mayoría de las personas prueban secuencias que confirman sus suposiciones (como 8, 10, 12) en lugar de probar secuencias que podrían refutarlas (como 6, 4, 2).</p>
+            <button id="restart-button">Reiniciar experimento</button>
+        </div>
+        
+        <div id="wrong-guess" class="wrong-guess">
+            <h3>No es correcto.</h3>
+            <p>La regla que has propuesto no es la correcta.</p>
+            <p>La regla verdadera era: <strong>Números en orden creciente</strong> (cada número es mayor que el anterior).</p>
+            <p>Este experimento, diseñado por Peter Wason en 1960, demuestra cómo tendemos a buscar confirmación de nuestras hipótesis en lugar de intentar refutarlas.</p>
+            <button id="restart-button-wrong">Reiniciar experimento</button>
+        </div>
+    </div>
+
+    <script>
+        // La regla real es: números en orden creciente
+        function checkRule(sequence) {
+            return sequence.length === 3 && sequence[0] < sequence[1] && sequence[1] < sequence[2];
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const num1Input = document.getElementById('num1');
+            const num2Input = document.getElementById('num2');
+            const num3Input = document.getElementById('num3');
+            const testButton = document.getElementById('test-button');
+            const historyList = document.getElementById('history-list');
+            const hypothesisNotes = document.getElementById('hypothesis-notes');
+            const guessButton = document.getElementById('guess-button');
+            const guessWarning = document.getElementById('guess-warning');
+            const guessContainer = document.getElementById('guess-container');
+            const ruleGuess = document.getElementById('rule-guess');
+            const submitGuess = document.getElementById('submit-guess');
+            const congratulations = document.getElementById('congratulations');
+            const wrongGuess = document.getElementById('wrong-guess');
+            const restartButton = document.getElementById('restart-button');
+            const restartButtonWrong = document.getElementById('restart-button-wrong');
+            
+            // Total de pruebas realizadas
+            let testCount = 1; // Empezamos con 1 por la secuencia inicial [2, 4, 6]
+            
+            // Mostrar advertencia sobre el único intento
+            guessButton.addEventListener('mouseenter', function() {
+                guessWarning.style.display = 'block';
+            });
+            
+            // Manejar prueba de secuencia
+            testButton.addEventListener('click', function() {
+                try {
+                    // Obtener valores de los tres campos
+                    const n1 = parseFloat(num1Input.value);
+                    const n2 = parseFloat(num2Input.value);
+                    const n3 = parseFloat(num3Input.value);
+                    
+                    // Verificar que sean tres números válidos
+                    if (isNaN(n1) || isNaN(n2) || isNaN(n3)) {
+                        alert('Por favor, ingresa tres números válidos.');
+                        return;
+                    }
+                    
+                    const sequence = [n1, n2, n3];
+                    
+                    // Verificar si la secuencia cumple con la regla
+                    const isValid = checkRule(sequence);
+                    const result = isValid ? "Válida" : "Inválida";
+                    const className = isValid ? "valid" : "invalid";
+                    
+                    // Agregar al historial
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `[${sequence.join(', ')}] - <span class="${className}">${result}</span>`;
+                    historyList.appendChild(historyItem);
+                    
+                    // Limpiar los campos de entrada
+                    num1Input.value = '';
+                    num2Input.value = '';
+                    num3Input.value = '';
+                    
+                    // Enfoque en el primer campo para la siguiente entrada
+                    num1Input.focus();
+                    
+                    // Incrementar contador de pruebas
+                    testCount++;
+                    
+                    // Auto-scroll al final del historial
+                    historyList.scrollTop = historyList.scrollHeight;
+                } catch (e) {
+                    alert('Error al procesar la secuencia. Asegúrate de usar números válidos.');
+                }
+            });
+            
+            // Permitir usar Enter para navegar entre campos y enviar
+            num1Input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') num2Input.focus();
+            });
+            
+            num2Input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') num3Input.focus();
+            });
+            
+            num3Input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') testButton.click();
+            });
+            
+            // Mostrar/ocultar el formulario de suposición
+            guessButton.addEventListener('click', function() {
+                guessContainer.style.display = 'block';
+                this.style.display = 'none';
+                guessWarning.style.display = 'none';
+            });
+            
+            // Verificar suposición
+            submitGuess.addEventListener('click', function() {
+                const guess = ruleGuess.value.trim().toLowerCase();
+                
+                // Deshabilitar botones para evitar más intentos
+                submitGuess.disabled = true;
+                testButton.disabled = true;
+                
+                // Palabras clave que indican comprensión correcta
+                const correctKeywords = [
+                    'creciente', 'ascendente', 'incremento', 'aumentan', 'mayor que',
+                    'cada número es mayor', 'orden creciente', 'orden ascendente'
+                ];
+                
+                // Verificar si la suposición es correcta
+                const isCorrect = correctKeywords.some(keyword => guess.includes(keyword));
+                
+                if (isCorrect) {
+                    congratulations.style.display = 'block';
+                    guessContainer.style.display = 'none';
+                    wrongGuess.style.display = 'none';
+                } else {
+                    wrongGuess.style.display = 'block';
+                    guessContainer.style.display = 'none';
+                }
+            });
+            
+            // Botón para reiniciar el experimento (después de acierto)
+            restartButton.addEventListener('click', function() {
+                reiniciarExperimento();
+            });
+            
+            // Botón para reiniciar el experimento (después de fallo)
+            restartButtonWrong.addEventListener('click', function() {
+                reiniciarExperimento();
+            });
+            
+            function reiniciarExperimento() {
+                // Limpiar historial
+                historyList.innerHTML = '<div class="history-item">[2, 4, 6] - <span class="valid">Válida</span></div>';
+                
+                // Reiniciar estado
+                testCount = 1;
+                guessButton.style.display = 'block';
+                guessButton.disabled = false;
+                guessContainer.style.display = 'none';
+                congratulations.style.display = 'none';
+                wrongGuess.style.display = 'none';
+                ruleGuess.value = '';
+                hypothesisNotes.value = '';
+                num1Input.value = '';
+                num2Input.value = '';
+                num3Input.value = '';
+                
+                // Rehabilitar botones
+                submitGuess.disabled = false;
+                testButton.disabled = false;
+            }
+            
+            // Permitir presionar Enter en el campo de suposición
+            ruleGuess.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitGuess.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
