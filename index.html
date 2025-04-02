@@ -10,56 +10,58 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
+            padding: 15px;
+            line-height: 1.5;
             color: #333;
+            font-size: 14px;
         }
         h1, h2, h3 {
             color: #2c3e50;
+            margin-top: 0;
         }
         .container {
             background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .sequence-display {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 15px 0;
             color: #3498db;
         }
         input[type="text"], input[type="number"] {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 4px;
+            font-size: 14px;
         }
         input[type="number"] {
-            width: 70px;
-            margin-right: 10px;
+            width: 60px;
+            margin-right: 8px;
             text-align: center;
         }
         textarea {
-            padding: 10px;
+            padding: 8px;
             width: 100%;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 4px;
+            font-size: 14px;
             resize: vertical;
-            min-height: 100px;
-            box-sizing: border-box; /* Añadido para mejor manejo del padding */
+            min-height: 80px;
+            box-sizing: border-box;
         }
         button {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
+            font-size: 14px;
+            margin: 4px;
             transition: background-color 0.3s;
         }
         button:hover {
@@ -70,20 +72,33 @@
             cursor: not-allowed;
         }
         .history {
-            margin-top: 20px;
-            max-height: 200px;
+            margin-top: 15px;
+            max-height: 300px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 8px;
             background-color: #fff;
             border-radius: 5px;
             border: 1px solid #ddd;
+            font-size: 13px;
         }
         .history-item {
-            padding: 10px;
+            padding: 8px 10px;
             border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
         }
-        .history-item:last-child { /* Evitar doble borde */
-             border-bottom: none;
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-number {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #555;
+            min-width: 22px;
+            text-align: right;
+        }
+        .history-content {
+            flex-grow: 1;
         }
         .valid {
             color: #27ae60;
@@ -94,88 +109,104 @@
             font-weight: bold;
         }
         .guess-container {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 12px;
             background-color: #edf7ff;
             border-radius: 5px;
             display: none;
         }
         .hypothesis-container {
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .hidden {
             display: none;
         }
         .instructions {
             background-color: #fffbeb;
-            padding: 15px;
+            padding: 12px;
             border-left: 4px solid #f1c40f;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
         }
-        .congratulations {
+        .congratulations, .wrong-guess {
             background-color: #e8f8f5;
             border-left: 4px solid #27ae60;
-            padding: 15px;
-            margin-top: 20px;
+            padding: 12px;
+            margin-top: 15px;
             display: none;
         }
         .wrong-guess {
             background-color: #fdedec;
             border-left: 4px solid #e74c3c;
-            padding: 15px;
-            margin-top: 20px;
-            display: none;
         }
         .flex-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
         .flex-item {
             flex: 1;
-            min-width: 300px;
+            min-width: 280px;
         }
         .warning {
             color: #e74c3c;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 8px;
             display: none;
+            font-size: 13px;
         }
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap; /* Para mejor ajuste en pantallas pequeñas */
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
         .input-group label {
-            font-size: 16px;
-            margin-right: 10px;
+            font-size: 14px;
+            margin-right: 8px;
         }
         .brackets {
-            font-size: 20px;
-            margin: 0 5px;
+            font-size: 18px;
+            margin: 0 4px;
         }
-        /* Estilo opcional para el nuevo botón de captura */
         #capture-button {
-            background-color: #1abc9c; /* Un color diferente para distinguirlo */
-            margin-top: 20px; /* Espacio arriba */
+            background-color: #1abc9c;
+            margin-top: 15px;
         }
         #capture-button:hover {
             background-color: #16a085;
         }
         @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 12px;
+            }
             input[type="number"] {
-                width: 50px; /* Ajustado para mejor encaje */
+                width: 50px;
                 margin-right: 5px;
+                font-size: 13px;
+            }
+            .history {
+                max-height: 250px;
             }
             .flex-container {
                 flex-direction: column;
+                gap: 12px;
+            }
+            .flex-item {
+                min-width: 100%;
             }
             .input-group {
-                 justify-content: center; /* Centrar inputs en móvil */
+                justify-content: center;
             }
             .input-group input {
-                margin-bottom: 5px; /* Espacio entre inputs si se envuelven */
+                margin-bottom: 5px;
+            }
+            button {
+                padding: 8px 10px;
+                font-size: 13px;
             }
         }
     </style>
@@ -214,7 +245,10 @@
                 <div class="history">
                     <h3>Historial de pruebas:</h3>
                     <div id="history-list">
-                        <div class="history-item">[2, 4, 6] - <span class="valid">Válida</span></div>
+                        <div class="history-item">
+                            <span class="history-number">1.</span>
+                            <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,9 +268,9 @@
         <button id="guess-button">¡Quiero hacer mi suposición!</button>
 
         <div id="guess-container" class="guess-container">
-            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 70%; margin-right: 10px; margin-bottom: 10px;" />
+            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 70%; margin-right: 10px; margin-bottom: 10px;">
             <button id="submit-guess">Verificar mi respuesta</button>
-            <p style="margin-top: 10px;">⚠️ Este es tu único intento para adivinar la regla.</p>
+            <p style="margin-top: 10px; font-size: 13px;">⚠️ Este es tu único intento para adivinar la regla.</p>
         </div>
 
         <div id="congratulations" class="congratulations">
@@ -255,12 +289,12 @@
             <p>Este experimento, diseñado por Peter Wason en 1960, demuestra cómo tendemos a buscar confirmación de nuestras hipótesis en lugar de intentar refutarlas.</p>
             <button id="restart-button-wrong">Reiniciar experimento</button>
         </div>
-    </div> <button id="capture-button">Descargar Captura de Pantalla</button>
+    </div>
+    <button id="capture-button">Descargar Captura de Pantalla</button>
 
     <script>
         // La regla real es: números en orden creciente
         function checkRule(sequence) {
-            // Asegurarse de que son números y están en orden creciente
             return sequence.length === 3 &&
                    typeof sequence[0] === 'number' && typeof sequence[1] === 'number' && typeof sequence[2] === 'number' &&
                    !isNaN(sequence[0]) && !isNaN(sequence[1]) && !isNaN(sequence[2]) &&
@@ -284,59 +318,55 @@
             const restartButton = document.getElementById('restart-button');
             const restartButtonWrong = document.getElementById('restart-button-wrong');
 
-            // Total de pruebas realizadas
-            let testCount = 1; // Empezamos con 1 por la secuencia inicial [2, 4, 6]
+            let testCount = 1;
 
-            // Mostrar advertencia sobre el único intento
             guessButton.addEventListener('mouseenter', function() {
                 guessWarning.style.display = 'block';
             });
-             guessButton.addEventListener('mouseleave', function() { // Ocultar al quitar el ratón
+            guessButton.addEventListener('mouseleave', function() {
                 guessWarning.style.display = 'none';
             });
 
-            // Manejar prueba de secuencia
             testButton.addEventListener('click', function() {
                 try {
-                    // Obtener valores de los tres campos como números flotantes
                     const n1 = parseFloat(num1Input.value);
                     const n2 = parseFloat(num2Input.value);
                     const n3 = parseFloat(num3Input.value);
 
-                    // Verificar que sean tres números válidos (no NaN)
                     if (isNaN(n1) || isNaN(n2) || isNaN(n3)) {
                         alert('Por favor, ingresa tres números válidos.');
                         return;
                     }
 
                     const sequence = [n1, n2, n3];
-
-                    // Verificar si la secuencia cumple con la regla
                     const isValid = checkRule(sequence);
                     const result = isValid ? "Válida" : "Inválida";
                     const className = isValid ? "valid" : "invalid";
 
-                    // Agregar al historial
                     const historyItem = document.createElement('div');
                     historyItem.className = 'history-item';
-                    // Mostrar números con formato consistente
-                    const formattedSequence = sequence.map(num => Number(num.toFixed(2)).toString()); // Evita muchos decimales y .0 innecesarios
-                    historyItem.innerHTML = `[${formattedSequence.join(', ')}] - <span class="${className}">${result}</span>`;
+                    
+                    const numberSpan = document.createElement('span');
+                    numberSpan.className = 'history-number';
+                    numberSpan.textContent = (testCount + 1) + '.';
+                    
+                    const contentSpan = document.createElement('span');
+                    contentSpan.className = 'history-content';
+                    const formattedSequence = sequence.map(num => Number(num.toFixed(2)).toString());
+                    contentSpan.innerHTML = `[${formattedSequence.join(', ')}] - <span class="${className}">${result}</span>`;
+                    
+                    historyItem.appendChild(numberSpan);
+                    historyItem.appendChild(contentSpan);
                     historyList.appendChild(historyItem);
 
-                    // Limpiar los campos de entrada
                     num1Input.value = '';
                     num2Input.value = '';
                     num3Input.value = '';
-
-                    // Enfoque en el primer campo para la siguiente entrada
                     num1Input.focus();
 
-                    // Incrementar contador de pruebas
                     testCount++;
 
-                    // Auto-scroll al final del historial
-                    const historyDiv = document.querySelector('.history'); // Selecciona el contenedor del historial
+                    const historyDiv = document.querySelector('.history');
                     historyDiv.scrollTop = historyDiv.scrollHeight;
 
                 } catch (e) {
@@ -345,17 +375,16 @@
                 }
             });
 
-            // Permitir usar Enter para navegar entre campos y enviar
             num1Input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    e.preventDefault(); // Evitar envío de formulario si existiera
+                    e.preventDefault();
                     num2Input.focus();
                 }
             });
 
             num2Input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                     e.preventDefault();
+                    e.preventDefault();
                     num3Input.focus();
                 }
             });
@@ -367,41 +396,34 @@
                 }
             });
 
-            // Mostrar/ocultar el formulario de suposición
             guessButton.addEventListener('click', function() {
                 guessContainer.style.display = 'block';
-                this.style.display = 'none'; // Oculta el botón "¡Quiero hacer mi suposición!"
-                guessWarning.style.display = 'none'; // Oculta la advertencia
-                ruleGuess.focus(); // Pone el foco en el input de la suposición
+                this.style.display = 'none';
+                guessWarning.style.display = 'none';
+                ruleGuess.focus();
             });
 
-            // Verificar suposición
             submitGuess.addEventListener('click', function() {
                 const guess = ruleGuess.value.trim().toLowerCase();
 
-                 if (!guess) {
-                     alert("Por favor, escribe tu suposición sobre la regla.");
-                     return;
-                 }
+                if (!guess) {
+                    alert("Por favor, escribe tu suposición sobre la regla.");
+                    return;
+                }
 
-                // Deshabilitar botones para evitar más intentos
                 submitGuess.disabled = true;
                 testButton.disabled = true;
-                num1Input.disabled = true; // Deshabilitar inputs también
+                num1Input.disabled = true;
                 num2Input.disabled = true;
                 num3Input.disabled = true;
 
-                // Palabras clave que indican comprensión correcta (ajustar si es necesario)
                 const correctKeywords = [
                     'creciente', 'ascendente', 'incremento', 'aumentan', 'mayor que',
                     'cada número es mayor', 'orden creciente', 'orden ascendente',
                     'menor a mayor', 'va subiendo', 'mas grande que el anterior'
                 ];
 
-                // Verificar si la suposición contiene alguna palabra clave correcta
                 const isCorrect = correctKeywords.some(keyword => guess.includes(keyword));
-
-                 // Ocultar siempre el contenedor de la suposición una vez verificada
                 guessContainer.style.display = 'none';
 
                 if (isCorrect) {
@@ -413,99 +435,82 @@
                 }
             });
 
-            // Botón para reiniciar el experimento (función común)
             function reiniciarExperimento() {
-                // Limpiar historial, dejando la secuencia inicial
-                historyList.innerHTML = '<div class="history-item">[2, 4, 6] - <span class="valid">Válida</span></div>';
+                historyList.innerHTML = `
+                    <div class="history-item">
+                        <span class="history-number">1.</span>
+                        <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
+                    </div>
+                `;
 
-                // Reiniciar estado
                 testCount = 1;
-                guessButton.style.display = 'block'; // Mostrar botón de adivinar
+                guessButton.style.display = 'block';
                 guessButton.disabled = false;
-                guessContainer.style.display = 'none'; // Ocultar área de adivinar
-                congratulations.style.display = 'none'; // Ocultar mensaje de éxito
-                wrongGuess.style.display = 'none'; // Ocultar mensaje de error
-                ruleGuess.value = ''; // Limpiar campo de suposición
-                hypothesisNotes.value = ''; // Limpiar notas
-                num1Input.value = ''; // Limpiar campos numéricos
+                guessContainer.style.display = 'none';
+                congratulations.style.display = 'none';
+                wrongGuess.style.display = 'none';
+                ruleGuess.value = '';
+                hypothesisNotes.value = '';
+                num1Input.value = '';
                 num2Input.value = '';
                 num3Input.value = '';
 
-                // Rehabilitar botones e inputs
                 submitGuess.disabled = false;
                 testButton.disabled = false;
                 num1Input.disabled = false;
                 num2Input.disabled = false;
                 num3Input.disabled = false;
 
-                 // Enfocar en el primer input
                 num1Input.focus();
             }
 
-            // Asignar la función de reinicio a ambos botones de reinicio
             restartButton.addEventListener('click', reiniciarExperimento);
             restartButtonWrong.addEventListener('click', reiniciarExperimento);
 
-            // Permitir presionar Enter en el campo de suposición para enviar
             ruleGuess.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                     e.preventDefault();
+                    e.preventDefault();
                     submitGuess.click();
                 }
             });
 
-            // ---> INICIO: Código para el botón de captura
             const captureButton = document.getElementById('capture-button');
 
             captureButton.addEventListener('click', function() {
-                console.log("Botón de captura clickeado"); // Log para depuración
-                // Ocultar temporalmente el propio botón de captura para que no salga en la imagen
                 captureButton.style.display = 'none';
-                 // Ocultar también botones de reinicio si están visibles
                 const restartBtnVisible = window.getComputedStyle(restartButton).display !== 'none';
                 const restartBtnWrongVisible = window.getComputedStyle(restartButtonWrong).display !== 'none';
                 if (restartBtnVisible) restartButton.style.display = 'none';
                 if (restartBtnWrongVisible) restartButtonWrong.style.display = 'none';
 
-
                 html2canvas(document.body, {
                     allowTaint: true,
                     useCORS: true,
                     scrollX: 0,
-                    scrollY: -window.scrollY, // Captura desde la parte superior visible
-                    windowWidth: document.documentElement.scrollWidth, // Usar scrollWidth para capturar ancho completo
-                    windowHeight: document.documentElement.scrollHeight, // Usar scrollHeight para capturar alto completo
-                    logging: true // Habilitar logs de html2canvas para depuración
+                    scrollY: -window.scrollY,
+                    windowWidth: document.documentElement.scrollWidth,
+                    windowHeight: document.documentElement.scrollHeight,
+                    logging: true
                 }).then(canvas => {
-                    console.log("html2canvas completado, generando enlace"); // Log para depuración
-                    // Crear un enlace temporal para la descarga
                     const link = document.createElement('a');
-                    link.download = 'experimento-wason-captura.png'; // Nombre del archivo
-                    link.href = canvas.toDataURL('image/png'); // Convierte el canvas a imagen PNG
-
-                    // Simular clic en el enlace para iniciar la descarga
-                    document.body.appendChild(link); // Añadir al DOM para que funcione en Firefox
+                    link.download = 'experimento-wason-captura.png';
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
                     link.click();
-                    document.body.removeChild(link); // Limpiar el enlace temporal
+                    document.body.removeChild(link);
 
-                    // Volver a mostrar los botones ocultos
                     captureButton.style.display = 'block';
                     if (restartBtnVisible) restartButton.style.display = 'block';
                     if (restartBtnWrongVisible) restartButtonWrong.style.display = 'block';
-
-
                 }).catch(error => {
-                    console.error("Error al generar la captura con html2canvas:", error);
-                    alert("Hubo un error al intentar generar la captura de pantalla. Revisa la consola para más detalles.");
-                    // Asegurarse de que los botones vuelven a ser visibles incluso si hay error
+                    console.error("Error al generar la captura:", error);
+                    alert("Hubo un error al generar la captura. Revisa la consola para más detalles.");
                     captureButton.style.display = 'block';
                     if (restartBtnVisible) restartButton.style.display = 'block';
                     if (restartBtnWrongVisible) restartButtonWrong.style.display = 'block';
                 });
             });
-            // ---> FIN: Código para el botón de captura
-
-        }); // Cierre del addEventListener 'DOMContentLoaded'
+        });
     </script>
 </body>
 </html>
