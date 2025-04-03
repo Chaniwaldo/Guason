@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 12px;
             line-height: 1.4;
@@ -66,8 +66,7 @@
         }
         .history {
             margin-top: 12px;
-            max-height: 400px;
-            overflow-y: auto;
+            max-height: none; /* Eliminamos límite de altura */
             padding: 8px;
             background-color: #fff;
             border-radius: 5px;
@@ -165,10 +164,17 @@
         }
         #capture-button {
             background-color: #1abc9c;
-            margin-top: 12px;
+            margin: 15px 0;
             width: 100%;
-            padding: 10px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            border-radius: 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
         #capture-button:hover {
             background-color: #16a085;
@@ -206,7 +212,35 @@
             font-size: 12px;
             margin-top: 5px;
         }
-        @media (max-width: 600px) {
+        .capture-area {
+            padding-bottom: 70px; /* Espacio para el botón fijo */
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 700px) {
             body {
                 padding: 10px;
                 font-size: 12px;
@@ -220,7 +254,6 @@
                 font-size: 12px;
             }
             .history {
-                max-height: 300px;
                 font-size: 11px;
             }
             .flex-container {
@@ -241,80 +274,85 @@
     </style>
 </head>
 <body>
-    <h1>Experimento de Wason: El Reto de la Secuencia 2-4-6</h1>
-
-    <div class="instructions">
-        <h3>Instrucciones:</h3>
-        <p>La secuencia [2, 4, 6] cumple con una regla secreta. Tu objetivo es descubrir esa regla.</p>
-        <p>Puedes probar otras secuencias de tres números, y el sistema te dirá si cumplen o no con la regla.</p>
-        <p>Utiliza los campos de hipótesis para registrar tus ideas mientras avanzas.</p>
-        <p><strong>IMPORTANTE:</strong> Solo tendrás UN intento para adivinar la regla final.</p>
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
     </div>
+    <div class="capture-area">
+        <h1>Experimento de Wason: El Reto de la Secuencia 2-4-6</h1>
 
-    <div class="container">
-        <div class="sequence-display">[2, 4, 6] - <span class="valid">Válida</span></div>
-
-        <div>
-            <h3>Prueba una nueva secuencia:</h3>
-            <div class="input-group">
-                <span class="brackets">[</span>
-                <input type="number" id="num1" placeholder="?" step="any">
-                <span class="brackets">,</span>
-                <input type="number" id="num2" placeholder="?" step="any">
-                <span class="brackets">,</span>
-                <input type="number" id="num3" placeholder="?" step="any">
-                <span class="brackets">]</span>
-                <button id="test-button">Probar</button>
-            </div>
+        <div class="instructions">
+            <h3>Instrucciones:</h3>
+            <p>La secuencia [2, 4, 6] cumple con una regla secreta. Tu objetivo es descubrir esa regla.</p>
+            <p>Puedes probar otras secuencias de tres números, y el sistema te dirá si cumplen o no con la regla.</p>
+            <p>Utiliza los campos de hipótesis para registrar tus ideas mientras avanzas.</p>
+            <p><strong>IMPORTANTE:</strong> Solo tendrás UN intento para adivinar la regla final.</p>
         </div>
 
-        <div class="flex-container">
-            <div class="flex-item">
-                <h3>Historial de pruebas:</h3>
-                <div class="history" id="history-list">
-                    <div class="history-item">
-                        <span class="history-number">1.</span>
-                        <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
-                    </div>
+        <div class="container">
+            <div class="sequence-display">[2, 4, 6] - <span class="valid">Válida</span></div>
+
+            <div>
+                <h3>Prueba una nueva secuencia:</h3>
+                <div class="input-group">
+                    <span class="brackets">[</span>
+                    <input type="number" id="num1" placeholder="?" step="any">
+                    <span class="brackets">,</span>
+                    <input type="number" id="num2" placeholder="?" step="any">
+                    <span class="brackets">,</span>
+                    <input type="number" id="num3" placeholder="?" step="any">
+                    <span class="brackets">]</span>
+                    <button id="test-button">Probar</button>
                 </div>
             </div>
 
-            <div class="flex-item">
-                <div class="hypothesis-container">
-                    <h3>Registro de hipótesis:</h3>
-                    <div id="hypothesis-inputs">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 1">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 2">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 3">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 4">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 5">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 6">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 7">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 8">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 9">
-                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 10">
+            <div class="flex-container">
+                <div class="flex-item">
+                    <h3>Historial de pruebas:</h3>
+                    <div class="history" id="history-list">
+                        <div class="history-item">
+                            <span class="history-number">1.</span>
+                            <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-item">
+                    <div class="hypothesis-container">
+                        <h3>Registro de hipótesis:</h3>
+                        <div id="hypothesis-inputs">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 1">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 2">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 3">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 4">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 5">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 6">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 7">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 8">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 9">
+                            <input type="text" class="hypothesis-input" placeholder="Hipótesis 10">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <h3>¿Crees que ya sabes la regla?</h3>
-        <div class="guess-button-container">
-            <button id="guess-button">¡Quiero adivinar la regla!</button>
-            <p class="warning-text">Recuerda: solo tienes UN intento para adivinar la regla.</p>
+        <div class="container">
+            <h3>¿Crees que ya sabes la regla?</h3>
+            <div class="guess-button-container">
+                <button id="guess-button">¡Quiero adivinar la regla!</button>
+                <p class="warning-text">Recuerda: solo tienes UN intento para adivinar la regla.</p>
+            </div>
+
+            <div id="guess-container" class="guess-container">
+                <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 100%; margin-bottom: 8px;">
+                <button id="submit-guess" style="width: 100%;">Verificar mi respuesta</button>
+                <p style="margin-top: 8px; font-size: 12px; text-align: center;">⚠️ Este es tu único intento para adivinar la regla.</p>
+            </div>
+
+            <div id="result-message" class="result-message hidden"></div>
         </div>
-
-        <div id="guess-container" class="guess-container">
-            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 100%; margin-bottom: 8px;">
-            <button id="submit-guess" style="width: 100%;">Verificar mi respuesta</button>
-            <p style="margin-top: 8px; font-size: 12px; text-align: center;">⚠️ Este es tu único intento para adivinar la regla.</p>
-        </div>
-
-        <div id="result-message" class="result-message hidden"></div>
     </div>
-    <button id="capture-button">Descargar Captura de Pantalla</button>
+    <button id="capture-button">Capturar toda la pantalla</button>
 
     <script>
         // La regla real es: números en orden creciente
@@ -337,6 +375,7 @@
             const submitGuess = document.getElementById('submit-guess');
             const resultMessage = document.getElementById('result-message');
             const captureButton = document.getElementById('capture-button');
+            const loadingOverlay = document.getElementById('loading-overlay');
 
             let testCount = 1;
 
@@ -378,9 +417,6 @@
                     num1Input.focus();
 
                     testCount++;
-
-                    const historyDiv = document.querySelector('.history');
-                    historyDiv.scrollTop = historyDiv.scrollHeight;
 
                 } catch (e) {
                     console.error('Error al procesar la secuencia:', e);
@@ -459,32 +495,54 @@
             });
 
             captureButton.addEventListener('click', function() {
+                // Mostrar overlay de carga
+                loadingOverlay.style.display = 'flex';
+                
+                // Ocultar temporalmente el botón de captura
                 captureButton.style.display = 'none';
-
-                html2canvas(document.body, {
-                    allowTaint: true,
-                    useCORS: true,
-                    scrollX: 0,
-                    scrollY: -window.scrollY,
-                    windowWidth: document.documentElement.scrollWidth,
-                    windowHeight: document.documentElement.scrollHeight,
-                    logging: true
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = 'experimento-wason-captura.png';
-                    link.href = canvas.toDataURL('image/png');
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    captureButton.style.display = 'block';
-                }).catch(error => {
-                    console.error("Error al generar la captura:", error);
-                    alert("Hubo un error al generar la captura. Revisa la consola para más detalles.");
-                    captureButton.style.display = 'block';
-                });
+                
+                // Pequeña pausa para que el DOM se actualice
+                setTimeout(function() {
+                    // Capturar toda la página
+                    html2canvas(document.querySelector('.capture-area'), {
+                        allowTaint: true,
+                        useCORS: true,
+                        scrollX: 0,
+                        scrollY: 0,
+                        windowWidth: document.documentElement.scrollWidth,
+                        windowHeight: document.documentElement.scrollHeight,
+                        logging: false,
+                        onclone: function(clonedDoc) {
+                            // Asegurar que vemos todo el contenido en el clon
+                            const clonedElem = clonedDoc.querySelector('.capture-area');
+                            if (clonedElem) {
+                                clonedElem.style.overflow = 'visible';
+                                clonedElem.style.height = 'auto';
+                            }
+                        }
+                    }).then(canvas => {
+                        // Crear enlace para descargar la imagen
+                        const link = document.createElement('a');
+                        link.download = 'experimento-wason-completo.png';
+                        link.href = canvas.toDataURL('image/png');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Ocultar el overlay y mostrar el botón nuevamente
+                        loadingOverlay.style.display = 'none';
+                        captureButton.style.display = 'block';
+                    }).catch(error => {
+                        console.error("Error al generar la captura:", error);
+                        alert("Hubo un error al generar la captura. Intenta nuevamente.");
+                        
+                        // Ocultar el overlay y mostrar el botón nuevamente en caso de error
+                        loadingOverlay.style.display = 'none';
+                        captureButton.style.display = 'block';
+                    });
+                }, 100);
             });
         });
     </script>
 </body>
-</html>       
+</html>   
