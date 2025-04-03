@@ -46,17 +46,6 @@
             margin-right: 6px;
             text-align: center;
         }
-        textarea {
-            padding: 8px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 13px;
-            resize: none;
-            min-height: 120px;
-            box-sizing: border-box;
-            overflow-y: hidden;
-        }
         button {
             background-color: #3498db;
             color: white;
@@ -77,7 +66,7 @@
         }
         .history {
             margin-top: 12px;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
             padding: 8px;
             background-color: #fff;
@@ -160,13 +149,6 @@
             flex: 1;
             min-width: 250px;
         }
-        .warning {
-            color: #e74c3c;
-            font-weight: bold;
-            margin-top: 6px;
-            display: none;
-            font-size: 12px;
-        }
         .input-group {
             display: flex;
             align-items: center;
@@ -184,9 +166,45 @@
         #capture-button {
             background-color: #1abc9c;
             margin-top: 12px;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
         }
         #capture-button:hover {
             background-color: #16a085;
+        }
+        .hypothesis-input {
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        #guess-button {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #e74c3c;
+            position: relative;
+            z-index: 1;
+        }
+        #guess-button:hover {
+            background-color: #c0392b;
+        }
+        .guess-button-container {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        .warning-text {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 5px;
         }
         @media (max-width: 600px) {
             body {
@@ -202,7 +220,7 @@
                 font-size: 12px;
             }
             .history {
-                max-height: 220px;
+                max-height: 300px;
                 font-size: 11px;
             }
             .flex-container {
@@ -211,9 +229,6 @@
             }
             .flex-item {
                 min-width: 100%;
-            }
-            textarea {
-                min-height: 100px;
             }
             button {
                 padding: 6px 8px;
@@ -232,7 +247,7 @@
         <h3>Instrucciones:</h3>
         <p>La secuencia [2, 4, 6] cumple con una regla secreta. Tu objetivo es descubrir esa regla.</p>
         <p>Puedes probar otras secuencias de tres números, y el sistema te dirá si cumplen o no con la regla.</p>
-        <p>Utiliza el cuadro de hipótesis para registrar tus ideas mientras avanzas.</p>
+        <p>Utiliza los campos de hipótesis para registrar tus ideas mientras avanzas.</p>
         <p><strong>IMPORTANTE:</strong> Solo tendrás UN intento para adivinar la regla final.</p>
     </div>
 
@@ -255,13 +270,11 @@
 
         <div class="flex-container">
             <div class="flex-item">
-                <div class="history">
-                    <h3>Historial de pruebas:</h3>
-                    <div id="history-list">
-                        <div class="history-item">
-                            <span class="history-number">1.</span>
-                            <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
-                        </div>
+                <h3>Historial de pruebas:</h3>
+                <div class="history" id="history-list">
+                    <div class="history-item">
+                        <span class="history-number">1.</span>
+                        <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
                     </div>
                 </div>
             </div>
@@ -269,7 +282,18 @@
             <div class="flex-item">
                 <div class="hypothesis-container">
                     <h3>Registro de hipótesis:</h3>
-                    <textarea id="hypothesis-notes" placeholder="Escribe aquí tus ideas e hipótesis mientras pruebas diferentes secuencias..."></textarea>
+                    <div id="hypothesis-inputs">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 1">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 2">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 3">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 4">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 5">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 6">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 7">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 8">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 9">
+                        <input type="text" class="hypothesis-input" placeholder="Hipótesis 10">
+                    </div>
                 </div>
             </div>
         </div>
@@ -277,17 +301,18 @@
 
     <div class="container">
         <h3>¿Crees que ya sabes la regla?</h3>
-        <p id="guess-warning" class="warning">Recuerda: solo tienes UN intento para adivinar la regla.</p>
-        <button id="guess-button">¡Quiero hacer mi suposición!</button>
+        <div class="guess-button-container">
+            <button id="guess-button">¡Quiero adivinar la regla!</button>
+            <p class="warning-text">Recuerda: solo tienes UN intento para adivinar la regla.</p>
+        </div>
 
         <div id="guess-container" class="guess-container">
-            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 70%; margin-right: 8px; margin-bottom: 8px;">
-            <button id="submit-guess">Verificar mi respuesta</button>
-            <p style="margin-top: 8px; font-size: 12px;">⚠️ Este es tu único intento para adivinar la regla.</p>
+            <input type="text" id="rule-guess" placeholder="Escribe aquí tu suposición sobre la regla" style="width: 100%; margin-bottom: 8px;">
+            <button id="submit-guess" style="width: 100%;">Verificar mi respuesta</button>
+            <p style="margin-top: 8px; font-size: 12px; text-align: center;">⚠️ Este es tu único intento para adivinar la regla.</p>
         </div>
 
         <div id="result-message" class="result-message hidden"></div>
-        <button id="restart-button" class="hidden">Reiniciar experimento</button>
     </div>
     <button id="capture-button">Descargar Captura de Pantalla</button>
 
@@ -300,42 +325,20 @@
                    sequence[0] < sequence[1] && sequence[1] < sequence[2];
         }
 
-        // Autoajustar altura del textarea
-        function adjustTextareaHeight(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const num1Input = document.getElementById('num1');
             const num2Input = document.getElementById('num2');
             const num3Input = document.getElementById('num3');
             const testButton = document.getElementById('test-button');
             const historyList = document.getElementById('history-list');
-            const hypothesisNotes = document.getElementById('hypothesis-notes');
             const guessButton = document.getElementById('guess-button');
-            const guessWarning = document.getElementById('guess-warning');
             const guessContainer = document.getElementById('guess-container');
             const ruleGuess = document.getElementById('rule-guess');
             const submitGuess = document.getElementById('submit-guess');
             const resultMessage = document.getElementById('result-message');
-            const restartButton = document.getElementById('restart-button');
             const captureButton = document.getElementById('capture-button');
 
             let testCount = 1;
-
-            // Autoajustar textarea al cargar y al escribir
-            adjustTextareaHeight(hypothesisNotes);
-            hypothesisNotes.addEventListener('input', function() {
-                adjustTextareaHeight(this);
-            });
-
-            guessButton.addEventListener('mouseenter', function() {
-                guessWarning.style.display = 'block';
-            });
-            guessButton.addEventListener('mouseleave', function() {
-                guessWarning.style.display = 'none';
-            });
 
             testButton.addEventListener('click', function() {
                 try {
@@ -409,7 +412,7 @@
             guessButton.addEventListener('click', function() {
                 guessContainer.style.display = 'block';
                 this.style.display = 'none';
-                guessWarning.style.display = 'none';
+                document.querySelector('.warning-text').style.display = 'none';
                 ruleGuess.focus();
             });
 
@@ -427,6 +430,11 @@
                 num2Input.disabled = true;
                 num3Input.disabled = true;
                 guessButton.disabled = true;
+                
+                // Deshabilitar todos los campos de hipótesis
+                document.querySelectorAll('.hypothesis-input').forEach(input => {
+                    input.disabled = true;
+                });
 
                 const correctKeywords = [
                     'creciente', 'ascendente', 'incremento', 'aumentan', 'mayor que',
@@ -441,40 +449,7 @@
                 resultMessage.textContent = isCorrect ? "Es correcto." : "No es correcto.";
                 resultMessage.className = isCorrect ? "result-message correct" : "result-message incorrect";
                 resultMessage.style.display = 'block';
-                restartButton.classList.remove('hidden');
             });
-
-            function reiniciarExperimento() {
-                historyList.innerHTML = `
-                    <div class="history-item">
-                        <span class="history-number">1.</span>
-                        <span class="history-content">[2, 4, 6] - <span class="valid">Válida</span></span>
-                    </div>
-                `;
-
-                testCount = 1;
-                guessButton.style.display = 'block';
-                guessButton.disabled = false;
-                guessContainer.style.display = 'none';
-                resultMessage.style.display = 'none';
-                restartButton.classList.add('hidden');
-                ruleGuess.value = '';
-                hypothesisNotes.value = '';
-                adjustTextareaHeight(hypothesisNotes);
-                num1Input.value = '';
-                num2Input.value = '';
-                num3Input.value = '';
-
-                submitGuess.disabled = false;
-                testButton.disabled = false;
-                num1Input.disabled = false;
-                num2Input.disabled = false;
-                num3Input.disabled = false;
-
-                num1Input.focus();
-            }
-
-            restartButton.addEventListener('click', reiniciarExperimento);
 
             ruleGuess.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -485,8 +460,6 @@
 
             captureButton.addEventListener('click', function() {
                 captureButton.style.display = 'none';
-                const restartBtnVisible = !restartButton.classList.contains('hidden');
-                if (restartBtnVisible) restartButton.style.display = 'none';
 
                 html2canvas(document.body, {
                     allowTaint: true,
@@ -505,15 +478,13 @@
                     document.body.removeChild(link);
 
                     captureButton.style.display = 'block';
-                    if (restartBtnVisible) restartButton.style.display = 'block';
                 }).catch(error => {
                     console.error("Error al generar la captura:", error);
                     alert("Hubo un error al generar la captura. Revisa la consola para más detalles.");
                     captureButton.style.display = 'block';
-                    if (restartBtnVisible) restartButton.style.display = 'block';
                 });
             });
         });
     </script>
 </body>
-</html>
+</html>       
